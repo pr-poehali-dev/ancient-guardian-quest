@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -291,7 +291,19 @@ export default function Index() {
   const [riddleAnswer, setRiddleAnswer] = useState('');
   const [riddleSolved, setRiddleSolved] = useState(false);
   const [completedGuardians, setCompletedGuardians] = useState<number[]>([]);
+  const [unlockedGuardians, setUnlockedGuardians] = useState<number[]>([1]);
   const [showFact, setShowFact] = useState(false);
+  const [collectedFragments, setCollectedFragments] = useState<number[]>([]);
+  
+  const correctSoundRef = useRef<HTMLAudioElement | null>(null);
+  const wrongSoundRef = useRef<HTMLAudioElement | null>(null);
+  const successSoundRef = useRef<HTMLAudioElement | null>(null);
+  
+  useEffect(() => {
+    correctSoundRef.current = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuCzPLaizsJHGi+8OedTgwOUqrp7K1aFgxKouT1x2wuBCqBzPL1iTsJG2m98OGaTQwRVLHq7rNhFw1Onef1zm0vBSiCzvLcizsIHGi98OGZTgwOUqvr7bNhGAxNnuj1zm4wBSeAzvLaiDwIHGi98OGbTQ0OUqvr7bNhFw1Onef1z28vBSiBzvLZiDoIHWm+8OGaTQ0OUqvr7rJgFw1Onef1z28vBSiBzvLaiDsJHGi+8OGaTQ0OUqvq7rJgFw1Onef1z28vBSiBzvLZiDsJHGi+8OGZTQ0OUqvq7rJgGAxOnef1z24vBSiBzvLZiDsJHGi+8OGZTQ0OUqvr7bJgFw1Onef1z24vBSiBzvLaiDsJHGi+8OGZTQ0OUqvr7bJgFw1Onef1z24vBSiBzvLaiDsJHGi+8OGZTQ0OUqvr7bJgFw1Onef1z24vBSiBzvLaiDsJHGi+8OGZTQ0OUqvr7bJgFw1Onef1z24vBSiBzvLaiDsJHGi+8OGZTQ0OUqvr7bJgFw1Onef1z24vBQ==');
+    wrongSoundRef.current = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAAD/8ePt5dXn9vL7/frx5d3c4+z0+Pzy6uLY19rh6fD1+fbv5d7W1dzk7fL2+vn0797a1dnh6e7z+Pn49/Dp4tzZ29/k6u/z9/j5+PPu6ePf3dzg5urv8/b4+vv59vPv6ePf3dzg5urv8/b4+vr49vPv6ePf3dzg5urv8/b4+vr49vPv6ePf3dzg5urv8/b4+vr49vPv6ePf3dzg5urv8/b4+vr49vPv6ePf3dzg5urv8/b4+vr49vPv6ePf3dzg5urv8/b4+vr49vPv6ePf3dzg5urv8/b4+vr49vPv6ePf3dzg5urv8/b4+vr49vPv6ePf3dzg5urv8/b4+vr49vPv6ePf3dzg5urv8/b4+vr49vPv6ePf3dzg5urv8/b4+vr49vPv6ePf3dzg5urv8/b4+vr49vPv6ePf3dzg5urv8/b4+vr49vPv6ePf3dzg5urv8/b4+vr49vPv6ePf3dzg5urv8/b4+vr49vPv6ePf3dzg5urv8/b4+vr49vPv6ePf3dzg5urv8/b4+vr49vPv6ePf3dzg5urv8/b4+vr49vPv6ePf3dzg5urv8/b4+vr49vPv6ePf3dzg5urv8/b4+vr49vPv6ePf3dzg5urv8/b4+vr49vPv6ePf3dzg5urv8/b4+vr49vPv6ePf3dzg5urv8/b4+vr49vPv6ePf3dzg5urv8/b4+vr49vPv6ePf3dzg5urv8w==');
+    successSoundRef.current = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm2dIBAAAABBAAEAQB8AAEAfAAABAAgAZGF0YQoGAACAhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuCzPLaizsJHGi+8OedTgwOUqrp7K1aFgxKouT1x2wuBCqBzPLaizsJHGi+8OedTgwOUqrp7K1aFgxKouT1x2wuBCqBzPLaizsJHGi+8OedTgwOUqrp7K1aFgxKouT1x2wuBCqBzPLaizsJHGi+8OedTgwOUqrp7K1aFgxKouT1x2wuBCqBzPLaizsJHGi+8OedTgwOUqrp7K1aFgxKouT1x2wuBCqBzPLaizsJHGi+8OedTgwOUqrp7K1aFgxKouT1x2wuBCqBzPLaizsJHGi+8OedTgwOUqrp7K1aFgxKouT1x2wuBA==');
+  }, []);
 
   const currentGuardian = guardians[currentGuardianIndex];
 
@@ -300,7 +312,19 @@ export default function Index() {
   };
 
   const handleGuardianClick = (index: number) => {
-    if (completedGuardians.includes(guardians[index].id)) {
+    const guardianId = guardians[index].id;
+    
+    if (!unlockedGuardians.includes(guardianId)) {
+      wrongSoundRef.current?.play();
+      toast({
+        title: '🔒 Локация заблокирована',
+        description: 'Сначала пройди предыдущие испытания!',
+        variant: 'destructive',
+      });
+      return;
+    }
+    
+    if (completedGuardians.includes(guardianId)) {
       toast({
         title: 'Фрагмент уже собран',
         description: 'Этот хранитель уже поделился своим фрагментом!',
@@ -316,12 +340,14 @@ export default function Index() {
 
   const handleRiddleSubmit = () => {
     if (riddleAnswer.toLowerCase().trim() === currentGuardian.riddleAnswer) {
+      correctSoundRef.current?.play();
       toast({
         title: '✨ Верно!',
         description: 'Загадка разгадана! Переходим к вопросу.',
       });
       setRiddleSolved(true);
     } else {
+      wrongSoundRef.current?.play();
       toast({
         title: '🤔 Подумай еще!',
         description: 'Попробуй еще раз разгадать загадку.',
@@ -334,12 +360,15 @@ export default function Index() {
     const isCorrect = answerIndex === currentGuardian.correctAnswer;
     
     if (isCorrect) {
+      correctSoundRef.current?.play();
       toast({
         title: '🎉 Правильно!',
         description: 'Ты получил фрагмент амулета!',
       });
       setCompletedGuardians([...completedGuardians, currentGuardian.id]);
+      setCollectedFragments([...collectedFragments, currentGuardian.id]);
     } else {
+      wrongSoundRef.current?.play();
       const newLives = lives - 1;
       setLives(newLives);
       toast({
@@ -354,11 +383,16 @@ export default function Index() {
       }
     }
     
+    if (currentGuardian.id < 20) {
+      setUnlockedGuardians([...unlockedGuardians, currentGuardian.id + 1]);
+    }
+    
     setShowFact(true);
   };
 
   const handleContinue = () => {
-    if (completedGuardians.length === 20) {
+    if (collectedFragments.length === 20) {
+      successSoundRef.current?.play();
       setStage('success');
     } else {
       setStage('map');
@@ -372,6 +406,8 @@ export default function Index() {
     setRiddleAnswer('');
     setRiddleSolved(false);
     setCompletedGuardians([]);
+    setUnlockedGuardians([1]);
+    setCollectedFragments([]);
     setShowFact(false);
   };
 
@@ -475,28 +511,59 @@ export default function Index() {
                 🗺️ Карта Сказочного Леса
               </h2>
               <p className="text-xl text-muted-foreground">
-                Собрано фрагментов: {completedGuardians.length} / 20
+                Собрано фрагментов: {collectedFragments.length} / 20
               </p>
               <div className="w-full bg-gray-200 rounded-full h-3 mt-4 max-w-md mx-auto">
                 <div
                   className="bg-gradient-to-r from-primary to-secondary h-3 rounded-full transition-all duration-500"
-                  style={{ width: `${(completedGuardians.length / 20) * 100}%` }}
+                  style={{ width: `${(collectedFragments.length / 20) * 100}%` }}
                 />
               </div>
+              
+              {collectedFragments.length > 0 && (
+                <div className="mt-6">
+                  <p className="text-lg font-semibold mb-3">✨ Собранные фрагменты амулета:</p>
+                  <div className="flex flex-wrap justify-center gap-2 max-w-2xl mx-auto">
+                    {collectedFragments.map(fragmentId => {
+                      const guardian = guardians.find(g => g.id === fragmentId);
+                      return (
+                        <div
+                          key={fragmentId}
+                          className={`w-12 h-12 rounded-lg bg-gradient-to-br ${guardian?.color} flex items-center justify-center text-2xl shadow-lg`}
+                          title={guardian?.name}
+                        >
+                          {guardian?.emoji}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
               {guardians.map((guardian, index) => {
                 const isCompleted = completedGuardians.includes(guardian.id);
+                const isUnlocked = unlockedGuardians.includes(guardian.id);
+                const isLocked = !isUnlocked;
+                
                 return (
                   <button
                     key={guardian.id}
                     onClick={() => handleGuardianClick(index)}
+                    disabled={isLocked && !isCompleted}
                     className={`relative group transition-all duration-300 ${
-                      isCompleted ? 'scale-95 opacity-75' : 'hover:scale-110 pulse-glow'
+                      isCompleted ? 'scale-95 opacity-75' : 
+                      isLocked ? 'opacity-40 cursor-not-allowed grayscale' :
+                      'hover:scale-110 pulse-glow'
                     }`}
                   >
                     <Card className={`p-6 text-center bg-gradient-to-br ${guardian.color} text-white relative overflow-hidden`}>
+                      {isLocked && !isCompleted && (
+                        <div className="absolute inset-0 bg-black/70 flex items-center justify-center backdrop-blur-sm">
+                          <Icon name="Lock" size={48} className="text-white" />
+                        </div>
+                      )}
                       {isCompleted && (
                         <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                           <Icon name="Check" size={48} className="text-white" />
